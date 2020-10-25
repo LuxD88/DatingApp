@@ -5,18 +5,30 @@
             <span class="navbar-toggler-icon"></span>
         </button> -->
         <!-- <div class="collapse navbar-collapse" id="navbarCollapse"> -->
-            <ul class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto" *ngIf="loggedIn">
                 <li class="nav-item">
-                <a class="nav-link" href="#">Matches</a>
+                    <a class="nav-link" href="#">Matches</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Links</a>
+                    <a class="nav-link" href="#">Links</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="#">Messages</a>
+                    <a class="nav-link" href="#">Messages</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" (click)="logout()">Logout</a>
                 </li>
             </ul>
-            <form #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" autocomplete="off">
+
+            <div class="dropdown" *ngIf="loggedIn">
+                <a class="dropdown-toggle text-light">Welcome user!</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item">Edit Profile</a>
+                    <a class="dropdown-item" (click)="logout()">Logout</a>
+                </div>
+            </div>
+
+            <form *ngIf="!loggedIn" #loginForm="ngForm" class="form-inline mt-2 mt-md-0" (ngSubmit)="login()" autocomplete="off">
                 <input
                     name="username"
                     [(ngModel)]="model.username"
