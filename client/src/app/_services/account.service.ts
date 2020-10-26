@@ -26,6 +26,19 @@ export class AccountService {
     )
   }
 
+  register(model:any) {
+    return this.http.post(this.baseUrl + 'account/register', model).pipe(
+      map((user: User) => {
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.currentUserSource.next(user);
+        }
+        // if we want to return the user (it is not needed, just as an example - this is why we get an undefined in he console)
+        // return user;
+      })
+    )
+  }
+
   setCurrentUser(user: User) {
     this.currentUserSource.next(user);
   }
