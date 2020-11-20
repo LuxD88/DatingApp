@@ -53,6 +53,9 @@ namespace API.Controllers
             var user = await _userRepository.GetUserByUsernameAsync(username);
 
             // map all properties from the memberUpdateDto to the user
+            // otherwise we have to do the mapping manually:
+            // user.City = memberUpdateDto.City
+            // ...
             _mapper.Map(memberUpdateDto, user);
 
             // update user
