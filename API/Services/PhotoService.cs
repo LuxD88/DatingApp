@@ -34,7 +34,7 @@ namespace API.Services
                 {
                     File = new FileDescription(file.FileName, stream),
                     Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
-                };
+                };  
                 uploadResults = await _cloudinary.UploadAsync(uploadParams);
             }
 
