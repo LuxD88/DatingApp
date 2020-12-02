@@ -1,6 +1,7 @@
 export interface User {
     username: string;
     token: string;
+    photoUrl: string;
 }
 
 // only demonstration purpose - not used in the DatingApp
