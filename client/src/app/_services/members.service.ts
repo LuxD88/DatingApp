@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ok } from 'assert';
 import { of, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -50,8 +51,15 @@ export class MembersService {
   }
 
     getMember(username: string) {
-    const member = this.members.find(x => x.username === username);
-    if (member !== undefined) return of(member);
+    const member = [...this.memberCash.values()]  // sperad oparator - it appends to array every time the funciton is called
+      .reduce((arr, elem) => arr.concat(elem.result), []) // flatten the array
+      .find((member: Member) => member.username === username);  // find the member needed by username
+
+    if (member) {
+      return of(member);
+    }
+    // console.log(member);
+
     return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
 
