@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { of, pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Member } from '../_models/member';
@@ -13,14 +13,28 @@ import { UserParams } from '../_models/userParams';
 export class MembersService {
   baseUrl = environment.apiUrl;
   members: Member[] = [];
+  memberCash = new Map();
 
   constructor(private http: HttpClient) { }
 
   getMembers(userParams: UserParams) {
-    // check if members is populated and use the data from it
-    // of returns the this.members as a observable
-    // if (this.members.length > 0) return of(this.members)
+    
+    var response = this.memberCash.get(Object.values(userParams).join('-'));
 
+    // console.log('aaa');
+    // console.log(response);
+    // let jsonObject = {};  
+    // this.memberCash.forEach((value, key) => {  
+    //     jsonObject[key] = value  
+    // });  
+    // console.log(JSON.stringify(jsonObject))
+
+    if (response) {
+      // console.log('bbb');
+      // console.log(response);
+      return of(response);
+    }
+    
     let params = this.getPaginationHeaders(userParams.pageNumber, userParams.pageSize);
 
     params = params.append('minAge', userParams.minAge.toString());
@@ -29,6 +43,10 @@ export class MembersService {
     params = params.append('orderBy', userParams.orderBy);
 
     return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params)
+      .pipe(map(response => {
+        this.memberCash.set(Object.values(userParams).join('-'), response);
+        return response;
+      }))
   }
 
     getMember(username: string) {
