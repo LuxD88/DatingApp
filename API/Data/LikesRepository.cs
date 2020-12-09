@@ -8,7 +8,7 @@ using API.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data {
-    public class LikesRepository : ILikesRepository {
+    public class LikesRepository : ILikesRepository {   
         private readonly DataContext _context;
         public LikesRepository (DataContext context) 
         {
@@ -25,13 +25,13 @@ namespace API.Data {
             var users = _context.Users.OrderBy(u => u.UserName).AsQueryable();
             var likes = _context.Likes.AsQueryable();
 
-            if (predicate == 'liked')
+            if (predicate == "liked")
             {
                 likes = likes.Where(like => like.SourceUserId == userId);
                 users = likes.Select(like => like.LikedUser);
             }
 
-            if (predicate == 'likedBy')
+            if (predicate == "likedBy")
             {
                 likes = likes.Where(like => like.LikedUserId == userId);
                 users = likes.Select(like => like.SourceUser);
@@ -54,4 +54,6 @@ namespace API.Data {
                 .Include(x => x.LikedUsers)
                 .FirstOrDefaultAsync(x => x.Id == userId);
         }
+    }
+
 }
