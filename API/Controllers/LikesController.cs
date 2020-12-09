@@ -50,7 +50,7 @@ namespace API.Controllers {
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LikeDto>>> GetUserLikes(string predicate)
         {
-             var users =  _likesRepository.GetUserLikes(predicate, User.GetUserId());
+             var users = await  _likesRepository.GetUserLikes(predicate, User.GetUserId());
              return Ok(users);
         }
 
