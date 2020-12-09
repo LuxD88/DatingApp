@@ -115,6 +115,14 @@ export class MembersService {
     );
   }
 
+  addLike(username: string) {
+    return this.http.post(this.baseUrl + 'likes/' + username, {})
+  }
+
+  getLikes(predicate: strign) {
+    return this.http.get(this.baseUrl + 'likes?=' + predicate);
+  }
+
   private getPaginationHeaders(pageNumber: number, pageSize: number) {
     let params = new HttpParams();
 
