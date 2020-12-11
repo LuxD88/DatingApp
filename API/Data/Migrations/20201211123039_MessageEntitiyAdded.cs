@@ -18,7 +18,7 @@ namespace API.Data.Migrations
                     RecipientId = table.Column<int>(type: "INTEGER", nullable: false),
                     RecipientUsername = table.Column<string>(type: "TEXT", nullable: true),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
-                    DateRed = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    DateRead = table.Column<DateTime>(type: "TEXT", nullable: true),
                     MessageSent = table.Column<DateTime>(type: "TEXT", nullable: false),
                     SenderDeleted = table.Column<bool>(type: "INTEGER", nullable: false),
                     RecipientDeleted = table.Column<bool>(type: "INTEGER", nullable: false)

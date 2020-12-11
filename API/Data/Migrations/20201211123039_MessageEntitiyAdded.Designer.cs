@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20201210153140_MessageEntitiyAdded")]
+    [Migration("20201211123039_MessageEntitiyAdded")]
     partial class MessageEntitiyAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,7 +77,7 @@ namespace API.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DateRed")
+                    b.Property<DateTime?>("DateRead")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("MessageSent")

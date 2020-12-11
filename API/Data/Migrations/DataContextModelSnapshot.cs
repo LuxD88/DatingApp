@@ -75,7 +75,7 @@ namespace API.Data.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("DateRed")
+                    b.Property<DateTime?>("DateRead")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("MessageSent")
