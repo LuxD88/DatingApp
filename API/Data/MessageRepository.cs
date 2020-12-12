@@ -47,7 +47,7 @@ namespace API.Data
             {
                 "Inbox" => query.Where(u => u.Recipient.UserName == messageParams.Username),
                 "Outbox" => query.Where(u => u.Sender.UserName == messageParams.Username),
-                _ => query.Where(u => u.Recipient.UserName == messageParams.Username && u.DateRead == null)
+                _ => query.Where(u => u.Recipient.UserName == messageParams.Username && u.DateRead == null) // Default is unread!
             };
 
             var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
