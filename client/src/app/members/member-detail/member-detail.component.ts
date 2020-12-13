@@ -25,7 +25,10 @@ export class MemberDetailComponent implements OnInit {
   constructor(private memberService: MembersService, private route: ActivatedRoute, private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.loadMember();
+    // this.loadMember();
+    this.route.data.subscribe(data => {
+      this.member = data.member;
+    })
 
     this.route.queryParams.subscribe(params => {
       params.tab ? this.selectTab(params.tab) : this.selectTab(0) // if we hava a query params called tab use it, otherwise go to tab 0 (the first one)
@@ -42,8 +45,8 @@ export class MemberDetailComponent implements OnInit {
       },
     ]
 
-    // moved to load member so there is no timing issue when loading the photos
-    // this.galleryImages = this.getImages();
+    // move back to On INti because we use a resolver to get the member and dont need loadMember any more
+    this.galleryImages = this.getImages();
   }
 
   getImages():NgxGalleryImage[] {
@@ -59,13 +62,13 @@ export class MemberDetailComponent implements OnInit {
     return imageUrls;
   }
 
-  loadMember() {
-    this.memberService.getMember(this.route.snapshot.paramMap.get('username')).subscribe(member => {
-      this.member = member;
-      // moved to load member so there is no timing issue when loading the photos
-      this.galleryImages = this.getImages();
-    })
-  }
+  // not needed any more because we use a resolver to load the members
+  // loadMember() {
+  //   this.memberService.getMember(this.route.snapshot.paramMap.get('username')).subscribe(member => {
+  //     this.member = member;
+  //     // moved to load member so there is no timing issue when loading the photos
+  //   })
+  // }
 
   loadMessages() {
     this.messageService.getMessageThread(this.member.username).subscribe(messages => {
