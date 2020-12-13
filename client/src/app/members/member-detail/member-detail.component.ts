@@ -1,3 +1,4 @@
+import { ThrowStmt } from '@angular/compiler';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
@@ -13,17 +14,22 @@ import { MessageService } from 'src/app/_services/message.service';
   styleUrls: ['./member-detail.component.css']
 })
 export class MemberDetailComponent implements OnInit {
-  @ViewChild('memberTabs') memberTabs: TabsetComponent;
+  @ViewChild('memberTabs', {static: true}) memberTabs: TabsetComponent;
   member: Member;
   galleryOptions: NgxGalleryOptions[];
   galleryImages: NgxGalleryImage[];
   activeTab: TabDirective;
   messages: Message[] = [];
+  tabs = {}; 
 
   constructor(private memberService: MembersService, private route: ActivatedRoute, private messageService: MessageService) { }
 
   ngOnInit(): void {
     this.loadMember();
+
+    this.route.queryParams.subscribe(params => {
+      params.tab ? this.selectTab(params.tab) : this.selectTab(0) // if we hava a query params called tab use it, otherwise go to tab 0 (the first one)
+    })
 
     this.galleryOptions = [
       {
@@ -65,6 +71,10 @@ export class MemberDetailComponent implements OnInit {
     this.messageService.getMessageThread(this.member.username).subscribe(messages => {
       this.messages = messages;
     })
+  }
+
+  selectTab(tabId: number) {
+    this.memberTabs.tabs[tabId].active = true;
   }
 
   onTabActivated(data: TabDirective) {
