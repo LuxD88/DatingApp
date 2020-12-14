@@ -24,4 +24,8 @@ export class MessageService {
   getMessageThread (username: string) {
     return this.http.get<Message[]>(this.baseUrl + 'messages/thread/' + username);
   }
+
+  sendMessage (username: string, content: string) {
+    return this.http.post<Message>(this.baseUrl + 'messages', { recipientUsername: username, content}) // becaseu conent in the createMessageDto == content in the client, we don't have to say content: content and can just pass the content by yourself
+  }
 }
