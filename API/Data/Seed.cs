@@ -19,11 +19,12 @@ namespace API.Data
 
             foreach (var user in users)
             {
-                using var hmac = new HMACSHA512();
+                // using var hmac = new HMACSHA512();
 
                 user.UserName = user.UserName.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("pass"));
-                user.PasswordSalt = hmac.Key;
+                // because we inherite from the IdentityUser we don't need those variables
+                // user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("pass"));
+                // user.PasswordSalt = hmac.Key;
             
                 context.Users.Add(user);
             }
