@@ -1,6 +1,6 @@
 import { ThrowStmt } from '@angular/compiler';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxGalleryAnimation, NgxGalleryImage, NgxGalleryOptions } from '@kolkov/ngx-gallery';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
 import { take } from 'rxjs/operators';
@@ -26,8 +26,10 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   tabs = {}; 
   user: User;
 
-  constructor(private route: ActivatedRoute, private messageService: MessageService, public presence: PresenceService, private accountService: AccountService) {
+  constructor(private route: ActivatedRoute, private messageService: MessageService, public presence: PresenceService,
+      private accountService: AccountService, private router: Router) {
     this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user);
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
    }
 
   ngOnInit(): void {
