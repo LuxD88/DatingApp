@@ -21,9 +21,9 @@ export class MessageService {
 
   constructor(private http: HttpClient) { }
 
-  createHubConnection(user: User, othereUserName: string) {
+  createHubConnection(user: User, otherUserName: string) {
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(this.hubUrl + 'message?user=' + othereUserName, {
+      .withUrl(this.hubUrl + 'message?user=' + otherUserName, {
         accessTokenFactory: () => user.token
       })
       .withAutomaticReconnect()
@@ -44,7 +44,7 @@ export class MessageService {
       })
       
       this.hubConnection.on('UpdatedGroup', (group: Group) => {
-        if (group.connections.some(x => x.username === othereUserName)) {
+        if (group.connections.some(x => x.username === otherUserName)) {
           this.messageThread$.pipe(take(1)).subscribe(messages => {
             messages.forEach(message => {
               if (!message.dateRead) {
