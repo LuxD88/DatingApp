@@ -33,7 +33,11 @@
               "./node_modules/ngx-toastr/toastr.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "devextreme",
+              "devextreme-angular"
+           ]
           },
           "configurations": {
             "production": {
