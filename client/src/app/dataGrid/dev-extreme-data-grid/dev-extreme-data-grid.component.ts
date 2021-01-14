@@ -1,20 +1,19 @@
-// import { Component, OnInit } from '@angular/core';
 
-import { NgModule, Component, OnInit, ViewChild, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { OnInit, Component, enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridComponent } from 'devextreme-angular';
-//          DxDataGridModule,
-//          DxSelectBoxModule,
-//          DxCheckBoxModule 
+import { DxDataGridModule } from 'devextreme-angular';
 
-
-import { Order, Service } from 'src/app/dataGrid/dataGridService';
+import DataSource from 'devextreme/data/data_source';
+import { Service } from 'src/app/dataGrid/dataGridService';
 
 
 if(!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
+
+let getOrderDay = function (rowData: any): number {
+  return (new Date(rowData.OrderDate)).getDay();
+};
 
 @Component({
   selector: 'app-dev-extreme-data-grid',
@@ -25,25 +24,34 @@ if(!/localhost/.test(document.location.host)) {
 })
 
 export class DevExtremeDataGridComponent implements OnInit {
-  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
-  orders: Order[];
+  dataSource: any;   
+  filterValue: Array<any>;
+  customOperations: Array<any>;
+  popupPosition: any;
   saleAmountHeaderFilter: any;
-  applyFilterTypes: any;
-  currentFilter: any;
-  currentFilter2: any;
-  showFilterRow: boolean;
-  showHeaderFilter: boolean;
 
   constructor(service: Service) {
-    this.orders = service.getOrders();
-    this.showFilterRow = true;
-    this.showHeaderFilter = true;
-    this.applyFilterTypes = [{
-        key: "auto",
-        name: "Immediately"
-    }, {
-        key: "onClick",
-        name: "On Button Click"
+    this.dataSource = new DataSource({
+      store: service.getOrders()
+    });
+
+    this.popupPosition = { of: window, at: "top", my: "top", offset: { y: 10 } };
+
+    this.filterValue = [
+        ['Employee', '=', 'Clark Morgan'],
+        'and',
+        ['OrderDate', 'weekends']
+    ];
+
+    this.customOperations = [{
+        name: "weekends",
+        caption: "Weekends",
+        dataTypes: ["date"],
+        icon: "check",
+        hasValue: false,
+        calculateFilterExpression: function () {
+            return [[getOrderDay, "=", 0], "or", [getOrderDay, "=", 6]];
+        }
     }];
 
     this.saleAmountHeaderFilter = [{
@@ -71,55 +79,18 @@ export class DevExtremeDataGridComponent implements OnInit {
         text: "Greater than $20000",
         value: ["SaleAmount", ">=", 20000]
     }];
-
-    this.currentFilter = this.applyFilterTypes[0].key;
-    this.currentFilter2 = this.applyFilterTypes[1].key;
-    this.orderHeaderFilter = this.orderHeaderFilter.bind(this);
   }
 
-  private static getOrderDay(rowData) {
-    return (new Date(rowData.OrderDate)).getDay();
-  }
-
-  calculateFilterExpression(value, selectedFilterOperations, target) {
-      let column = this as any;
-      if(target === "headerFilter" && value === "weekends") {
-          return [[DevExtremeDataGridComponent.getOrderDay, "=", 0], "or", [DevExtremeDataGridComponent.getOrderDay, "=", 6]];
-      }
-      return column.defaultCalculateFilterExpression.apply(this, arguments);
-  }
-
-  orderHeaderFilter(data) {
-      data.dataSource.postProcess = (results) => {
-          results.push({
-              text: "Weekends",
-              value: "weekends"
-          });
-          return results;
-      };
-  }
-
-  clearFilter() {
-      this.dataGrid.instance.clearFilter();
+  onInitialized(e) {
+    e.component.columnOption("SaleAmount", {
+        editorOptions: {
+            format: "currency",
+            showClearButton: true
+        }
+    });
   }
 
   ngOnInit(): void {
   }
 
 }
-
-// @NgModule({
-//     imports: [
-//         BrowserModule,
-//         DxDataGridModule,
-//         DxSelectBoxModule,
-//         DxCheckBoxModule
-//     ],
-//     declarations: [DevExtremeDataGridComponent],
-//     bootstrap: [DevExtremeDataGridComponent]
-// })
-
-// export class AppModule { }
-
-// platformBrowserDynamic().bootstrapModule(AppModule);
-
