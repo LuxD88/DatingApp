@@ -29,11 +29,18 @@ export class DevExtremeDataGridComponent implements OnInit {
   customOperations: Array<any>;
   popupPosition: any;
   saleAmountHeaderFilter: any;
+  orders: Order[];
+  users: Partial<User[]>;
+  constructor(private service: Service, private adminService: AdminService) {
+    // this.dataSource = new DataSource({
+    //   store: service.getOrders()
+    // });
 
-  constructor(service: Service) {
-    this.dataSource = new DataSource({
-      store: service.getOrders()
-    });
+    // this.orders = service.getOrders();
+
+    // console.log(this.dataSource);
+    // console.log(this.orders);
+
 
     this.popupPosition = { of: window, at: "top", my: "top", offset: { y: 10 } };
 
@@ -79,6 +86,26 @@ export class DevExtremeDataGridComponent implements OnInit {
         text: "Greater than $20000",
         value: ["SaleAmount", ">=", 20000]
     }];
+  }
+
+  ngOnInit(): void {
+    this.getUsersWithRoles();
+  }
+
+  getUsersWithRoles() {
+    this.adminService.getUsersWithRoles().subscribe( users => {
+      this.users = users;
+      console.log(this.users);
+    })
+
+    // this.dataSource = new DataSource({
+    //   store: this.service.getOrders()
+    // });
+
+    // this.orders = this.service.getOrders();
+
+    // console.log(this.dataSource);
+    // console.log(this.orders);
   }
 
   onInitialized(e) {
