@@ -4,7 +4,9 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
 
 import DataSource from 'devextreme/data/data_source';
-import { Service } from 'src/app/dataGrid/dataGridService';
+import { Order, Service } from 'src/app/dataGrid/dataGridService';
+import { User } from 'src/app/_models/user';
+import { AdminService } from 'src/app/_services/admin.service';
 
 
 if(!/localhost/.test(document.location.host)) {
@@ -20,7 +22,6 @@ let getOrderDay = function (rowData: any): number {
   providers: [ Service ],
   templateUrl: './dev-extreme-data-grid.component.html',
   styleUrls: ['./dev-extreme-data-grid.component.css']
-  // preserveWhitespaces: true
 })
 
 export class DevExtremeDataGridComponent implements OnInit {
@@ -31,6 +32,9 @@ export class DevExtremeDataGridComponent implements OnInit {
   saleAmountHeaderFilter: any;
   orders: Order[];
   users: Partial<User[]>;
+  allMode: string;
+  checkBoxesMode: string;
+
   constructor(private service: Service, private adminService: AdminService) {
     // this.dataSource = new DataSource({
     //   store: service.getOrders()
@@ -41,6 +45,8 @@ export class DevExtremeDataGridComponent implements OnInit {
     // console.log(this.dataSource);
     // console.log(this.orders);
 
+    this.allMode = "allPages";
+    this.checkBoxesMode = "onClick";
 
     this.popupPosition = { of: window, at: "top", my: "top", offset: { y: 10 } };
 
@@ -117,7 +123,91 @@ export class DevExtremeDataGridComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  rowClickEvent() {  
+    console.log("rowClickEvent");  
+  } 
+
+  onContextMenuPreparing(e) {
+    let items = [];
+
+    const selectedItems = e.component.getSelectedRowKeys();
+
+    const hasEditData = e.component.hasEditData();
+
+    if (selectedItems.length === 0) {
+      items = [
+        {
+          text: "No selected rows",
+          disabled: true
+        }
+      ];
+    } else {
+      const subItems = [];
+      const rowData = e.component.getSelectedRowsData();
+
+      selectedItems.forEach(item => {
+        rowData.forEach(data => {
+          if (item === data.orderId) {
+            subItems.push({
+              text: item,
+              items: [
+                {
+                  text: "Edit Row",
+                  onClick: () => {
+                    e.component.editRow(e.component.getRowIndexByKey(item));
+                  }
+                },
+                {
+                  template: function() {
+                    return `<div> Region: ${data.region} </div>
+                            <div> Country: ${data.country} </div>
+                            <div> City: ${data.city} </div>
+                            <div> Amount: ${data.amount} </div>
+                            <div> Date: ${data.date} </div>
+                            `;
+                  },
+                  onClick: () => {
+                    console.log(data);
+                  }
+                }
+              ]
+            });
+          }
+        });
+      });
+
+      items = [
+        {
+          text: "Selected Rows",
+          items: subItems
+        }
+      ];
+    }
+
+    items.push(
+      {
+        text: "Add Row",
+        disabled: hasEditData,
+        onClick: () => {
+          e.component.addRow();
+        }
+      },
+      {
+        text: "Save Data",
+        disabled: !hasEditData,
+        onClick: () => {
+          e.component.saveEditData();
+        }
+      },
+      {
+        text: "Cancel",
+        onClick: () => {
+          e.component.cancelEditData();
+        }
+      }
+    );
+
+    e.items = items;
   }
 
 }

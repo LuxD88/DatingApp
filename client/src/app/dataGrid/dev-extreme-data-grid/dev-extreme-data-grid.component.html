@@ -1,8 +1,15 @@
 <dx-data-grid 
+    (onContextMenuPreparing)="onContextMenuPreparing($event)"
     id="gridContainer" 
     [dataSource]="users"
     (onInitialized)="onInitialized($event)"
+    (onRowClick)="rowClickEvent()"
     [showBorders]="true">
+    <dxo-selection
+        [selectAllMode]="allMode"
+        [showCheckBoxesMode]="checkBoxesMode"
+        mode="single">
+    </dxo-selection>
     <dxo-filter-panel [visible]="true"></dxo-filter-panel>
     <dxo-filter-builder
         [customOperations]="customOperations"
