@@ -5,6 +5,10 @@
     (onInitialized)="onInitialized($event)"
     (onRowClick)="rowClickEvent()"
     [showBorders]="true">
+    <dxo-search-panel 
+        [visible]="true" 
+        [width]="240" 
+        placeholder="Search..."></dxo-search-panel>
     <dxo-export [enabled]="true"></dxo-export>
     <dxo-selection
         [selectAllMode]="allMode"
