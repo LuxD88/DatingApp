@@ -27,6 +27,8 @@
     "devextreme": "^20.2.4",
     "devextreme-angular": "^20.2.4",
     "devextreme-schematics": "^1.2.7",
+    "exceljs": "^4.2.0",
+    "file-saver": "^2.0.5",
     "font-awesome": "^4.7.0",
     "ng2-file-upload": "^1.4.0",
     "ngx-bootstrap": "^6.1.0",
