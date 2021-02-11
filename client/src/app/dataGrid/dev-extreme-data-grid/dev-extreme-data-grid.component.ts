@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
 
 import DataSource from 'devextreme/data/data_source';
-import { Order, Service } from 'src/app/dataGrid/dataGridService';
+// import { Order, Service } from 'src/app/dataGrid/dataGridService';
 import { User } from 'src/app/_models/user';
 import { AdminService } from 'src/app/_services/admin.service';
 
@@ -19,7 +19,7 @@ let getOrderDay = function (rowData: any): number {
 
 @Component({
   selector: 'app-dev-extreme-data-grid',
-  providers: [ Service ],
+  // providers: [ Service ],
   templateUrl: './dev-extreme-data-grid.component.html',
   styleUrls: ['./dev-extreme-data-grid.component.css']
 })
@@ -30,12 +30,12 @@ export class DevExtremeDataGridComponent implements OnInit {
   customOperations: Array<any>;
   popupPosition: any;
   saleAmountHeaderFilter: any;
-  orders: Order[];
+  // orders: Order[];
   users: Partial<User[]>;
   allMode: string;
   checkBoxesMode: string;
 
-  constructor(private service: Service, private adminService: AdminService) {
+  constructor(private adminService: AdminService) {
     // this.dataSource = new DataSource({
     //   store: service.getOrders()
     // });
